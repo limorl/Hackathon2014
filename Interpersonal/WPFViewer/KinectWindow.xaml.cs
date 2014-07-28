@@ -92,6 +92,8 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
                 }
                 else
                 {
+                    kinectWindow.settingsPanel.Visibility = Visibility.Collapsed;
+
                     var uri = new Uri(@"Images/arrow-left-round.png", UriKind.Relative);
                     kinectWindow.debugButtonImage.Source = GetImageSource(uri);
                 }

@@ -38,7 +38,7 @@
             <!-- The main viewer -->
             <ColumnDefinition Width="*" MinWidth="600"/>
             <!-- The Debug panel -->
-            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         
         <!-- The Meeting Viewer -->
@@ -76,26 +76,25 @@
             </StackPanel>
         </DockPanel>
         
-        
         <!-- The main viewer -->
         <Grid Grid.Column="1" Grid.Row="0" Margin="0" >
             <Grid Name="MainViewerHost">
                 <Grid Name="ColorVis" Background="{StaticResource DarkNeutralBrush}">
-                    <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform">
+                    <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill">
                         <!-- Make the colorViewer and skeletonViewer overlap entirely. -->
                         <Grid>
                             <kt:KinectColorViewer x:Name="ColorViewer" KinectSensorManager="{Binding KinectSensorManager}" CollectFrameRate="True" RetainImageOnSensorChange="True" />
                             <Canvas>
-                                <kt:KinectSkeletonViewer 
+                                <!--<kt:KinectSkeletonViewer 
                                     KinectSensorManager="{Binding KinectSensorManager}"
                                     Visibility="{Binding KinectSensorManager.ColorStreamEnabled, Converter={StaticResource BoolToVisibilityConverter}}"
                                     Width="{Binding ElementName=ColorViewer,Path=ActualWidth}"
                                     Height="{Binding ElementName=ColorViewer,Path=ActualHeight}"
-                                    ImageType="Color" />
-                                <!--<st:KinectSpeakerViewer 
+                                    ImageType="Color" />-->
+                                <st:KinectSpeakerViewer 
                                     KinectSensorManager="{Binding KinectSensorManager}"
                                     Visibility="{Binding KinectSensorManager.ColorStreamEnabled, Converter={StaticResource BoolToVisibilityConverter}}"
-                                    ImageType="Color" />-->
+                                    ImageType="Color" />
                             </Canvas>
                         </Grid>
                     </Viewbox>
@@ -110,7 +109,7 @@
                         </StackPanel>
                     </Border> 
                     
-                    <Rectangle Fill="#7777" Visibility="{Binding KinectSensorManager.ColorStreamEnabled, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}" SnapsToDevicePixels="True" HorizontalAlignment="Right" Width="664"/>
+                    <Rectangle Fill="#7777" Visibility="{Binding KinectSensorManager.ColorStreamEnabled, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}" SnapsToDevicePixels="True" HorizontalAlignment="Right" />
                     
                     <!-- image to open the debug window -->
                     <Button Name="debugButtn" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="25" Height="25" Background="Transparent" Click="debugButton_Click" BorderThickness="0">
