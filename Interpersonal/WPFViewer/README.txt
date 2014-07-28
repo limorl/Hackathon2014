@@ -1,0 +1,1 @@
+﻿This viewer is based on the Toolkit 1.8 sample project: KinnectExplorer-WPF
