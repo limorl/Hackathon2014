@@ -23,11 +23,6 @@ namespace SpeakerTracking
                 throw new ArgumentNullException("sensorManager");
             }
 
-            if (sensorManager.KinectSensor == null)
-            {
-                throw new ArgumentException("KinectSensor is null");
-            }
-
             this.sensorManager = sensorManager;
             sensorManager.KinectSensorChanged += OnKinectSensorChanged;
             sensorManager.KinectStatusChanged += OnKinectStatusChanged;

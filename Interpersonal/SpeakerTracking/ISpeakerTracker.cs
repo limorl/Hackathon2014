@@ -104,7 +104,7 @@ namespace SpeakerTracking
         {
             if (currSession != null)
             {
-                throw new InvalidOperationException("Cannot end session before it started");
+             //   throw new InvalidOperationException("Cannot end session before it started");
             }
 
             currSession.End();
@@ -230,7 +230,7 @@ namespace SpeakerTracking
 
     }
 
-    class SummaryData
+    public class SummaryData
     { }
 #endregion 
 }
