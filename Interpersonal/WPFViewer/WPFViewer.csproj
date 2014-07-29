@@ -98,11 +98,11 @@
     <Resource Include="Images\swap.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\Program Files\Microsoft SDKs\Kinect\Developer Toolkit v1.8.0\Samples\C#\KinectWpfViewers\Microsoft.Samples.Kinect.WpfViewers.csproj">
+    <ProjectReference Include="C:\Program Files\Microsoft SDKs\Kinect\Developer Toolkit v1.8.0\Samples\C#\KinectWpfViewers\Microsoft.Samples.Kinect.WpfViewers.csproj">
       <Project>{4de23893-27e7-423f-9bb6-ba21dac2c45e}</Project>
       <Name>Microsoft.Samples.Kinect.WpfViewers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\..\Program Files\Microsoft SDKs\Kinect\Developer Toolkit v1.8.0\Samples\C#\Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj">
+    <ProjectReference Include="C:\Program Files\Microsoft SDKs\Kinect\Developer Toolkit v1.8.0\Samples\C#\Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj">
       <Project>{c6f9c31b-6130-4443-a5cc-ef0664552ecd}</Project>
       <Name>Microsoft.Kinect.Toolkit</Name>
     </ProjectReference>
