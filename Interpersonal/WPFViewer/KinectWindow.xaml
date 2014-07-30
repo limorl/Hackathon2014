@@ -117,13 +117,14 @@
                     <!-- title -->
                     <Label Grid.Row="0" Grid.ColumnSpan="3" Content="participants" Margin="0,10,0,0" FontFamily="Segoe UI" FontSize="16" Foreground="#7D7D7D" />                    
                     <!-- participants row 1 -->
-                    <Image Grid.Row="1" Grid.Column="0" Source="Images\deliak.png" Style="{StaticResource ParticipantImageStyle}" />
-                    <Image Grid.Row="1" Grid.Column="1" Source="Images\huberte.png" Style="{StaticResource ParticipantImageStyle}" />
-                    <Image Grid.Row="1" Grid.Column="2" Source="Images\limorl.png" Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser0" Grid.Row="1" Grid.Column="0" Source="Images\deliak.jpg" Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser1" Grid.Row="1" Grid.Column="1" Source="Images\huberte.jpg" Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser4" Grid.Row="1" Grid.Column="2" Source="Images\limorl.jpg" Style="{StaticResource ParticipantImageStyle}" />
 
                     <!-- participants row 2 -->
-                    <Image Grid.Row="2" Grid.Column="0" Source="Images\yairg.png"  Style="{StaticResource ParticipantImageStyle}" />
-                    <Image Grid.Row="2" Grid.Column="1" Source="Images\yoramy.png"  Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser2" Grid.Row="2" Grid.Column="0" Source="Images\yairg.jpg"  Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser3" Grid.Row="2" Grid.Column="1" Source="Images\yoramy.jpg"  Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser5" Grid.Row="2" Grid.Column="2"  Style="{StaticResource ParticipantImageStyle}" />
                 </Grid>
                 <Label Content="speaking time" Margin="0,10,0,0" FontFamily="Segoe UI" FontSize="16" Foreground="#7D7D7D" />
                 <!-- mock image as a place holder -->
@@ -143,16 +144,16 @@
                         <Grid>
                             <kt:KinectColorViewer x:Name="ColorViewer" KinectSensorManager="{Binding KinectSensorManager}" CollectFrameRate="True" RetainImageOnSensorChange="True" />
                             <Canvas>
-                                <!--<kt:KinectSkeletonViewer 
+                                <kt:KinectSkeletonViewer 
                                     KinectSensorManager="{Binding KinectSensorManager}"
                                     Visibility="{Binding KinectSensorManager.ColorStreamEnabled, Converter={StaticResource BoolToVisibilityConverter}}"
                                     Width="{Binding ElementName=ColorViewer,Path=ActualWidth}"
                                     Height="{Binding ElementName=ColorViewer,Path=ActualHeight}"
-                                    ImageType="Color" />-->
-                                <st:KinectSpeakerViewer 
+                                    ImageType="Color" />
+                                <!--<st:KinectSpeakerViewer 
                                     KinectSensorManager="{Binding KinectSensorManager}"
                                     Visibility="{Binding KinectSensorManager.ColorStreamEnabled, Converter={StaticResource BoolToVisibilityConverter}}"
-                                    ImageType="Color" />
+                                    ImageType="Color" />-->
                             </Canvas>
                             <!-- Selection for user Tagging -->
                             <Canvas Name="selectionCanvas" Visibility="Collapsed">
@@ -289,10 +290,10 @@
 
                         </ListItem>
                     </ListView>
-                        <Button Name="meetingSetupSave"  Content="save" FontFamily="Segoe UI" FontSize="16" Foreground="White"
+                        <Button Name="meetingStart"  Content="save" FontFamily="Segoe UI" FontSize="16" Foreground="White"
                             HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="35" Height="25" Background="Transparent" 
                             Style="{DynamicResource ButtonStyle}" Margin="0,0,5,5" BorderThickness="1" BorderBrush="#7D7D7D"
-                            Click="meetingSetupSave_Click" >
+                            Click="meetingStart_Click" >
                         </Button>
                     </StackPanel>
             </StackPanel>

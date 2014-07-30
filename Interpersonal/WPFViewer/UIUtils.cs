@@ -8,9 +8,28 @@ namespace Interpersonal.WPFViewer
     using System.Text;
     using System.Windows;
     using System.Windows.Media;
+    using System.Windows.Media.Imaging;
 
     class UIUtils
     {
+        public static BitmapImage GetImageSource(string relativePath)
+        {
+            return GetImageSource(new Uri(relativePath, UriKind.Relative));
+        }
+
+        public static BitmapImage GetImageSource(Uri relativeUri)
+        {
+            var newImage = new BitmapImage();
+
+            newImage.CreateOptions = System.Windows.Media.Imaging.BitmapCreateOptions.IgnoreImageCache;
+            newImage.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.None;
+            Uri urisource = relativeUri;
+            newImage.BeginInit();
+            newImage.UriSource = urisource;
+            newImage.EndInit();
+
+            return newImage;
+        }
         public static T GetFrameworkElementByName<T>(FrameworkElement referenceElement) where T : FrameworkElement
         {
 

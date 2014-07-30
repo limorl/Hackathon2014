@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SpeakerTracking
 {
-    interface ISpeakerTracker
+    public interface ISpeakerTracker
     {
         event EventHandler<SpeakerChangedEventArgs> SpeakerChanged;
 
@@ -36,11 +36,17 @@ namespace SpeakerTracking
         public UserIdentifier OldSpeaker { get; set; }
 
         public UserIdentifier NewSpeaker { get; set; }
+
+        public int NewAudioLevel { get; set; }
     }
 
     public class SpeakerVolumeChangedEventArgs : EventArgs
     {
-        //TODO
+        public UserIdentifier Speaker { get; set; }
+
+        public int OldAudioLevel { get; set; }
+
+        public int NewAudioLevel { get; set; }
     }
 
     public class SpeakerInterruptedEventArgs : EventArgs
@@ -49,6 +55,7 @@ namespace SpeakerTracking
 
         public UserIdentifier InterrupingSpeaker { get; set; }
 
+        public int AudioLevel { get; set; }
     }
 
     public class UpdateEventArgs : EventArgs
@@ -61,17 +68,21 @@ namespace SpeakerTracking
 
 #region Result Data
 
-    // TODO Need to enable offline storage
     public class UserIdentifier
     {
+        // This is the index in the lst configuration file
         public int Index { get; private set; }
 
-        public double SeatAngle { get; private set; }
+        // the alias
+        public string Id { get; private set; }
 
-        public UserIdentifier(int index, double seatAngle)
+        public double Angle { get; private set; }
+
+        public UserIdentifier(int index, string id, double seatAngle)
         {
-            Index = index;
-            SeatAngle = seatAngle;
+            this.Index = index;
+            this.Id = id;
+            this.Angle = seatAngle;
         }
     }
 

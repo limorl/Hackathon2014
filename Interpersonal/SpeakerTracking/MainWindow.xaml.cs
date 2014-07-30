@@ -13,6 +13,7 @@
     using System.Windows.Data;
     using Microsoft.Samples.Kinect.WpfViewers;
     using System.Windows.Threading;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -20,15 +21,16 @@
     public partial class MainWindow : Window
     {
         private readonly KinectSensorChooser sensorChooser = new KinectSensorChooser();
+
         private ISpeakerTracker speakerTracker;
 
         public MainWindow()
         {
             InitializeComponent();
             var users = new UserIdentifier[] {
-                new UserIdentifier(0, 132),
-                new UserIdentifier(1, 123),
-                new UserIdentifier(2, 321)
+                new UserIdentifier(0, "huberte", 132),
+                new UserIdentifier(1, "yairg", 123),
+                new UserIdentifier(2, "limorl", 321)
             };
             speakerTracker = new SpeakerVerificationUserTracker(users);
 
