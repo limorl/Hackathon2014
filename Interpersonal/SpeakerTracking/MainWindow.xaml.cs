@@ -28,9 +28,13 @@
         {
             InitializeComponent();
             var users = new UserIdentifier[] {
-                new UserIdentifier(0, "huberte", 132),
-                new UserIdentifier(1, "yairg", 123),
-                new UserIdentifier(2, "limorl", 321)
+                new UserIdentifier(-1, "No One", 132),
+                new UserIdentifier(0, "deliak", 145),
+                new UserIdentifier(1, "huberte", 132),
+                new UserIdentifier(2, "limorl", 321),
+                new UserIdentifier(3, "yairg", 123),
+                new UserIdentifier(4, "yoramy", 123),
+
             };
             speakerTracker = new SpeakerVerificationUserTracker(users);
 
@@ -63,6 +67,7 @@
                         delegate()
                         {
                             this.speakerIndexText.Text = e.NewSpeaker.Index.ToString();
+                            this.speakerNameText.Text = e.NewSpeaker.Id;
                         }));
             }
         }

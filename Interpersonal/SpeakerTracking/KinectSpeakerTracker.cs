@@ -33,7 +33,13 @@ namespace SpeakerTracking
                         {
                             Debug.WriteLine("Invalid line " + line);
                         }
+                        var audioLevel = int.Parse(parsedData[3]);
+                        Debug.WriteLine("Audio Level:" + audioLevel);
                         var speakerId = int.Parse(parsedData[2]);
+                        if (audioLevel < 5000 )
+                        {
+                            speakerId = -1;
+                        }
                         if (this.currentSpeaker == null || this.currentSpeaker.Index != speakerId)
                         {
                             // 
