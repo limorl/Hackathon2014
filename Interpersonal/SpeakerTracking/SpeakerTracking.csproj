@@ -76,6 +76,7 @@
     </ApplicationDefinition>
     <Compile Include="AudioTracker.cs" />
     <Compile Include="ISpeakerTracker.cs" />
+    <Compile Include="KinectAudioSpeakerTracker.cs" />
     <Compile Include="KinectSpeakerTracker.cs" />
     <Compile Include="KinectSpeakerViewer.xaml.cs">
       <DependentUpon>KinectSpeakerViewer.xaml</DependentUpon>

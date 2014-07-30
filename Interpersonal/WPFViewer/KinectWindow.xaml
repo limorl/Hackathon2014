@@ -117,18 +117,45 @@
                     <!-- title -->
                     <Label Grid.Row="0" Grid.ColumnSpan="3" Content="participants" Margin="0,10,0,0" FontFamily="Segoe UI" FontSize="16" Foreground="#7D7D7D" />                    
                     <!-- participants row 1 -->
-                    <Image Name="imageUser0" Grid.Row="1" Grid.Column="0" Source="Images\deliak.jpg" Style="{StaticResource ParticipantImageStyle}" />
-                    <Image Name="imageUser1" Grid.Row="1" Grid.Column="1" Source="Images\huberte.jpg" Style="{StaticResource ParticipantImageStyle}" />
-                    <Image Name="imageUser4" Grid.Row="1" Grid.Column="2" Source="Images\limorl.jpg" Style="{StaticResource ParticipantImageStyle}" />
+                    <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" 
+                            Style="{DynamicResource ButtonStyle}"
+                            Click="bttnParticipant_Click" BorderThickness="0">
+                        <Image Name="imageUser0"  Source="Images\deliak.jpg" Style="{StaticResource ParticipantImageStyle}" />
+                    </Button>
+                    <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" 
+                            Style="{DynamicResource ButtonStyle}"
+                            Click="bttnParticipant_Click" BorderThickness="0">
+                        <Image Name="imageUser1"  Source="Images\huberte.jpg" Style="{StaticResource ParticipantImageStyle}" />
+                    </Button>
+                    <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" 
+                            Style="{DynamicResource ButtonStyle}"
+                            Click="bttnParticipant_Click" BorderThickness="0">
+                        <Image Name="imageUser4"  Source="Images\limorl.jpg" Style="{StaticResource ParticipantImageStyle}" />
+                    </Button>
 
                     <!-- participants row 2 -->
-                    <Image Name="imageUser2" Grid.Row="2" Grid.Column="0" Source="Images\yairg.jpg"  Style="{StaticResource ParticipantImageStyle}" />
-                    <Image Name="imageUser3" Grid.Row="2" Grid.Column="1" Source="Images\yoramy.jpg"  Style="{StaticResource ParticipantImageStyle}" />
-                    <Image Name="imageUser5" Grid.Row="2" Grid.Column="2"  Style="{StaticResource ParticipantImageStyle}" />
+                    <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" 
+                            Style="{DynamicResource ButtonStyle}"
+                            Click="bttnParticipant_Click" BorderThickness="0">
+                        <Image Name="imageUser2"  Source="Images\yairg.jpg" Style="{StaticResource ParticipantImageStyle}" />
+                    </Button>
+                    <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" 
+                            Style="{DynamicResource ButtonStyle}"
+                            Click="bttnParticipant_Click" BorderThickness="0">
+                        <Image Name="imageUser3"  Source="Images\yoramy.jpg" Style="{StaticResource ParticipantImageStyle}" />
+                    </Button>
+                    <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" 
+                            Style="{DynamicResource ButtonStyle}"
+                            Click="bttnParticipant_Click" BorderThickness="0">
+                        <Image Name="imageUser5"  Style="{StaticResource ParticipantImageStyle}" />
+                    </Button>
                 </Grid>
                 <Label Content="speaking time" Margin="0,10,0,0" FontFamily="Segoe UI" FontSize="16" Foreground="#7D7D7D" />
+                
                 <!-- mock image as a place holder -->
                 <Image Source="Images/speakingTime.png" Width="175" Margin="0,10,0,0" />
+
+
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical" Margin="15,35,15,15" Background="#565656">
                 <Label Content="alerts" Margin="0,10,0,0" FontFamily="Segoe UI" FontSize="16" Foreground="#7D7D7D" />
@@ -290,7 +317,7 @@
 
                         </ListItem>
                     </ListView>
-                        <Button Name="meetingStart"  Content="save" FontFamily="Segoe UI" FontSize="16" Foreground="White"
+                        <Button Name="meetingStart"  Content="start" FontFamily="Segoe UI" FontSize="16" Foreground="White"
                             HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="35" Height="25" Background="Transparent" 
                             Style="{DynamicResource ButtonStyle}" Margin="0,0,5,5" BorderThickness="1" BorderBrush="#7D7D7D"
                             Click="meetingStart_Click" >

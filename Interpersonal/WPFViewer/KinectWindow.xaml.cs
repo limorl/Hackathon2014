@@ -46,6 +46,8 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
         private ISpeakerTracker tracker;
         private IUserDb userDb;
         private readonly KinectWindowViewModel viewModel;
+        private PersonalDashboardWindow personalDashboard;
+
         
         /// <summary>
         /// Initializes a new instance of the KinectWindow class, which provides access to many KinectSensor settings
@@ -298,6 +300,23 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
             return participants;
         }
         #endregion
+
+        private void bttnParticipant_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPersonalDashboard();
+        }
+
+        private void ShowPersonalDashboard()
+        {
+            if (this.personalDashboard != null)
+            {
+                this.personalDashboard.Close();
+            }
+
+            this.personalDashboard = new PersonalDashboardWindow();
+            this.personalDashboard.Show();
+            //this.Window.Activate();
+        }
     }
 
     /// <summary>

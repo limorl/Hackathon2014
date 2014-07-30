@@ -82,6 +82,9 @@
     <Compile Include="KinectSensorItem.cs" />
     <Compile Include="KinectSensorItemCollection.cs" />
     <Compile Include="MeetingInfo.cs" />
+    <Compile Include="PersonalDashboardWindow.xaml.cs">
+      <DependentUpon>PersonalDashboardWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UIUtils.cs" />
     <Compile Include="User.cs" />
     <Compile Include="VisibilityConverter.cs" />
@@ -89,6 +92,10 @@
       <SubType>Code</SubType>
     </Compile>
     <AppDesigner Include="Properties\" />
+    <Page Include="PersonalDashboardWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="KinectExplorer.ico" />
@@ -135,7 +142,7 @@
     <Resource Include="Images\speakingTime.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Dashboard.jpg" />
+    <Resource Include="Images\personal-dashboard.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
