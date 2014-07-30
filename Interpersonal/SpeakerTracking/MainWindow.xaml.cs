@@ -25,8 +25,12 @@
         public MainWindow()
         {
             InitializeComponent();
-
-            speakerTracker = new MockSpeakerTracker();
+            var users = new UserIdentifier[] {
+                new UserIdentifier(0, 132),
+                new UserIdentifier(1, 123),
+                new UserIdentifier(2, 321)
+            };
+            speakerTracker = new SpeakerVerificationUserTracker(users);
 
             speakerTracker.SpeakerChanged += speakerTracker_SpeakerChanged;
             speakerTracker.SpeakerInterrupted += speakerTracker_SpeakerInterrupted;

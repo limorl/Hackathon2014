@@ -39,7 +39,6 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
                // new PropertyMetadata(null));     
 
         private readonly KinectWindowViewModel viewModel;
-        private KinectSpeakerTracker tracker;
         /// <summary>
         /// Initializes a new instance of the KinectWindow class, which provides access to many KinectSensor settings
         /// and output visualization.
@@ -57,8 +56,6 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
                 new UserIdentifier(index:2, seatAngle:-23)
             };
 
-            var tracker = new KinectSpeakerTracker(this.viewModel.KinectSensorManager, users);
-            tracker.SpeakerChanged += (s, a) => Debug.WriteLine(String.Format("Change speeker from {0} to {1}", a.OldSpeaker != null ?  a.OldSpeaker.Index : -1, a.NewSpeaker.Index));
             Binding sensorBinding = new Binding("KinectSensor");
             sensorBinding.Source = this;
             BindingOperations.SetBinding(this.viewModel.KinectSensorManager, KinectSensorManager.KinectSensorProperty, sensorBinding);
