@@ -11,12 +11,16 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Input;
+    using System.Linq;
     using Microsoft.Kinect;
     using Microsoft.Samples.Kinect.WpfViewers;
     using System.Windows.Media.Imaging;
     using System;
     using SpeakerTracking;
     using System.Diagnostics;
+    using Interpersonal.WPFViewer;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// Interaction logic for KinectWindow.xaml.
@@ -38,7 +42,9 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
                new PropertyMetadata(true, SettingsVisibility_Changed));             
                // new PropertyMetadata(null));     
 
+        private MeetingInfo currMeeting;
         private readonly KinectWindowViewModel viewModel;
+        
         /// <summary>
         /// Initializes a new instance of the KinectWindow class, which provides access to many KinectSensor settings
         /// and output visualization.
@@ -66,6 +72,9 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
             this.DataContext = this.viewModel;
             
             InitializeComponent();
+            // initialize UI binding
+            this.setupParticipants.Items.Clear();
+            this.setupParticipants.ItemsSource = new ObservableCollection<User>(Configuration.Users.Values);
         }
 
         public KinectSensor KinectSensor
@@ -168,7 +177,50 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
             this.SettingsVisibility = !this.SettingsVisibility;
         }
 
-       
+        #region Meeting Setup
+        private void meetingSetupSave_Click(object sender, RoutedEventArgs e)
+        {
+            var meetingName = this.setupMeetingName.Text;
+            var participants = GetMeetingParticipants();
+
+            // create new meeting
+            this.currMeeting = new MeetingInfo(meetingName, participants);
+
+            // update the meeting panel
+
+
+        }
+
+        private List<User> GetMeetingParticipants()
+        {
+            var participants = new List<User> { };
+
+            for (int i = 0; i < this.setupParticipants.Items.Count; i++)
+            {
+                CheckBox checkBox = null;
+                var participantItem = this.setupParticipants.ItemContainerGenerator.ContainerFromIndex(i) as ListViewItem;
+                if (participantItem != null)
+                {
+                    //get the item's template parent
+                    ContentPresenter templateParent = UIUtils.GetFrameworkElementByName<ContentPresenter>(participantItem);
+
+                    //get the DataTemplate that the CheckBox is in
+                    DataTemplate dataTemplate = this.setupParticipants.ItemTemplate;
+                    if (dataTemplate != null && templateParent != null)
+                    {
+                        checkBox = dataTemplate.FindName("checkBox", templateParent) as CheckBox;
+                    }
+                    if (checkBox != null && checkBox.IsChecked.HasValue && checkBox.IsChecked.Value)
+                    {
+                        // add user to the attendees
+                        participants.Add((User)this.setupParticipants.Items.GetItemAt(i));
+                    }
+                }
+            }
+
+            return participants;
+        }
+        #endregion
     }
 
     /// <summary>
@@ -176,6 +228,7 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
     /// </summary>
     public class KinectWindowViewModel : DependencyObject
     {
+        public ObservableCollection<User> Users { get; set; }
         public static readonly DependencyProperty KinectSensorManagerProperty =
             DependencyProperty.Register(
                 "KinectSensorManager",
