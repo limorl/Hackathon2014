@@ -16,7 +16,8 @@ namespace SpeakerTracking
         static readonly string pipeName = @"\\.\pipe\interpersonal";
         public SpeakerVerificationUserTracker(IEnumerable<UserIdentifier> users)
         {
-            client = new NamedPipeClientStream("interpersonal");
+            this.currentSpeaker = users.First();
+            client = new NamedPipeClientStream(".", "interpersonal", PipeDirection.In);
             client.Connect();
             this._users = users;
             Task.Factory.StartNew( () =>
@@ -28,12 +29,12 @@ namespace SpeakerTracking
                         // a {TimeStamp} {Speeker ID} {AudioLevel} 
                         var line = reader.ReadLine();
                         var parsedData = line.Split(' ');
-                        if (String.Equals(parsedData[0],"a"))
+                        if (!String.Equals(parsedData[0],"a"))
                         {
                             Debug.WriteLine("Invalid line " + line);
                         }
                         var speakerId = int.Parse(parsedData[2]);
-                        if (this.currentSpeaker.Index != speakerId)
+                        if (this.currentSpeaker == null || this.currentSpeaker.Index != speakerId)
                         {
                             // 
                             // The user has changed lets notify 
@@ -43,10 +44,13 @@ namespace SpeakerTracking
                             {
                                 Debug.WriteLine("Invalid speaker Id raised");
                             }
+                            else
+                            {
 
-                            var speakerChangedEventArg = new SpeakerChangedEventArgs { OldSpeaker = this.currentSpeaker, NewSpeaker = newSpeaker };
-                            this.currentSpeaker = newSpeaker;
-                            SpeakerChanged.Invoke(this, speakerChangedEventArg);
+                                var speakerChangedEventArg = new SpeakerChangedEventArgs { OldSpeaker = this.currentSpeaker, NewSpeaker = newSpeaker };
+                                this.currentSpeaker = newSpeaker;
+                                SpeakerChanged.Invoke(this, speakerChangedEventArg);
+                            }
                         }
                     }
                 });
