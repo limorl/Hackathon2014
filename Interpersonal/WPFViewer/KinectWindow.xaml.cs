@@ -116,8 +116,8 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
 
         private void tracker_SpeakerInterrupted(object sender, SpeakerInterruptedEventArgs e)
         {
-            var idInterrupted = e.InterruptedSpeaker == null ? "null" : e.InterrupingSpeaker.Id;
-            var idInterrupting = e.InterrupingSpeaker == null ? "null" : e.InterruptedSpeaker.Id;
+            var idInterrupted = e.InterruptedSpeaker == null ? "none" : e.InterrupingSpeaker.Id;
+            var idInterrupting = e.InterrupingSpeaker == null ? "none" : e.InterruptedSpeaker.Id;
 
             Debug.WriteLine(string.Format("Speaker Interrupted: speakerId={0} interrupted to {1} (audioLevel={2}",
                 idInterrupted,
@@ -136,8 +136,8 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
 
         private void tracker_SpeakerChanged(object sender, SpeakerChangedEventArgs e)
         {
-            var idOld = e.OldSpeaker == null ? "null" : e.OldSpeaker.Id;
-            var idNew = e.NewSpeaker == null ? "null" : e.NewSpeaker.Id;
+            var idOld = e.OldSpeaker == null ? "none" : e.OldSpeaker.Id;
+            var idNew = e.NewSpeaker == null ? "none" : e.NewSpeaker.Id;
 
             Debug.WriteLine(string.Format("Speaker changed: oldSpeaker={0} newSpeaker={1} audioLevel = {2}",
                 idOld,
@@ -254,7 +254,9 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
 
                 // create new meeting
                 this.currMeeting = new MeetingInfo(meetingName, participants);
+                this.alertsList.Items.Clear();
                 this.alerts = new ObservableCollection<MeetingAlert> { };
+                this.alertsList.ItemsSource = this.alerts;
                 
                 // update the meeting panel
                 this.meetingName.Content = this.currMeeting.Name;
