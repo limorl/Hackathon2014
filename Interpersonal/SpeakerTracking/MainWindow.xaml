@@ -12,6 +12,7 @@
         
         <StackPanel Grid.Column="0" Name="labels" HorizontalAlignment="Left" Orientation="Vertical">
             <TextBox  Name="speakerIndexLabel" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Left" IsReadOnly="True" BorderThickness="0">Speaker Index: </TextBox>
+            <TextBox  Name="speakerNameLabel" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Left" IsReadOnly="True" BorderThickness="0">Speaker Name:</TextBox>
             <TextBox  Name="speakerAngleLabel" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Left" IsReadOnly="True" BorderThickness="0">Speaker Angle</TextBox>
             <TextBox  Name="speakerAudioLevelLabel" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Left" IsReadOnly="True" BorderThickness="0">Speaker Audio Level</TextBox>
             <TextBox  Name="speakerInterruptedLabel" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Left" IsReadOnly="True" BorderThickness="0">Speaker Interrupted</TextBox>
@@ -19,6 +20,7 @@
 
         <StackPanel Grid.Column="1" Name="texts" HorizontalAlignment="Left" Orientation="Vertical">
             <TextBox  Name="speakerIndexText" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Center" IsReadOnly="True" BorderThickness="0">-1</TextBox>
+            <TextBox  Name="speakerNameText" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Center" IsReadOnly="True" BorderThickness="0">No One</TextBox>
             <TextBox  Name="speakerAngleText" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Center" IsReadOnly="True" BorderThickness="0">0</TextBox>
             <TextBox  Name="speakerAudioLevelText" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Center" IsReadOnly="True" BorderThickness="0">0</TextBox>
             <TextBox  Name="speakerInterruptedText" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Center" IsReadOnly="True" BorderThickness="0">false</TextBox>

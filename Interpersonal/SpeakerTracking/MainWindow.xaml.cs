@@ -27,10 +27,15 @@
         public MainWindow()
         {
             InitializeComponent();
+            int index = -1;
             var users = new UserIdentifier[] {
-                new UserIdentifier(0, "huberte", 132),
-                new UserIdentifier(1, "yairg", 123),
-                new UserIdentifier(2, "limorl", 321)
+                new UserIdentifier(index++, "No One", 132),
+                new UserIdentifier(index++, "deliak", 145),
+              //  new UserIdentifier(index++, "huberte", 132),
+                new UserIdentifier(index++, "limorl", 321),
+              //  new UserIdentifier(index++, "yairg", 123),
+                new UserIdentifier(index++, "yoramy", 123),
+
             };
             speakerTracker = new SpeakerVerificationUserTracker(users);
 
@@ -63,6 +68,7 @@
                         delegate()
                         {
                             this.speakerIndexText.Text = e.NewSpeaker.Index.ToString();
+                            this.speakerNameText.Text = e.NewSpeaker.Id;
                         }));
             }
         }
