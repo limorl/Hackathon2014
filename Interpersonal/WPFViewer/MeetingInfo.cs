@@ -13,7 +13,7 @@ namespace Interpersonal.WPFViewer
         public string Id { get; private set; }
         public string Name { get; private set; }
         public IEnumerable<User> Attendees{ get; private set; }
-
+       
         public MeetingInfo(string name, IEnumerable<User> attendees)
         {
             ValidateMeetingInfo(name, attendees);
@@ -38,5 +38,10 @@ namespace Interpersonal.WPFViewer
                 throw new ArgumentException("No attendees");
             }
         }
+    }
+
+    class MeetingAlert
+    {
+        public string Message { get; set; }
     }
 }

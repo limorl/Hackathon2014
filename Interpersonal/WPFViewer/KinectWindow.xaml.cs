@@ -43,6 +43,7 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
                // new PropertyMetadata(null));     
 
         private MeetingInfo currMeeting;
+        private ObservableCollection<MeetingAlert> alerts;
         private ISpeakerTracker tracker;
         private IUserDb userDb;
         private readonly KinectWindowViewModel viewModel;
@@ -67,6 +68,7 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
             //User data
             this.userDb = new UserDbMock();
 
+            this.tracker = new SimpleKinectAudioSpeakerTracking(this.viewModel.KinectSensorManager, () => this.GetParticipantsIds()); // not thread safe
             Binding sensorBinding = new Binding("KinectSensor");
             sensorBinding.Source = this;
             BindingOperations.SetBinding(this.viewModel.KinectSensorManager, KinectSensorManager.KinectSensorProperty, sensorBinding);
@@ -77,6 +79,7 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
             this.DataContext = this.viewModel;
             
             InitializeComponent();
+
             // initialize UI binding
             this.setupParticipants.Items.Clear();
             this.setupParticipants.ItemsSource = new ObservableCollection<User>(Configuration.Users.Values);
@@ -97,41 +100,59 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
 
         private void tracker_SpeakerVolumeChanged(object sender, SpeakerVolumeChangedEventArgs e)
         {
-            Debug.WriteLine(string.Format("Speaker volume changed: speakerId={0} from {1} to {2}", e.Speaker.Id, e.OldAudioLevel, e.NewAudioLevel));
+            var idSpeaker = e.Speaker == null ? "none" : e.Speaker.Id;
+
+            Debug.WriteLine(string.Format("Speaker volume changed: speakerId={0} from {1} to {2}", idSpeaker, e.OldAudioLevel, e.NewAudioLevel));
+            var msg = string.Format("Loud Speaker: {0}", idSpeaker);
+            this.alerts.Add(new MeetingAlert { Message = msg });
 
             User speaker = null;
             if (TryGetMeetingAttendee(e.Speaker.Id, out speaker))
             {
-                userDb.WriteSpeaker(speaker.Id, this.currMeeting.Id, DateTimeOffset.Now, e.NewAudioLevel);
+                userDb.WriteSpeaker(idSpeaker, this.currMeeting.Id, DateTimeOffset.Now, e.NewAudioLevel);
             }
         }
         
 
         private void tracker_SpeakerInterrupted(object sender, SpeakerInterruptedEventArgs e)
         {
-            Debug.WriteLine(string.Format("Speaker Interrupted: speakerId={0} interrupted to {1} (audioLevel={2}", 
-                e.InterrupingSpeaker.Id, 
-                e.InterruptedSpeaker.Id,
+            var idInterrupted = e.InterruptedSpeaker == null ? "null" : e.InterrupingSpeaker.Id;
+            var idInterrupting = e.InterrupingSpeaker == null ? "null" : e.InterruptedSpeaker.Id;
+
+            Debug.WriteLine(string.Format("Speaker Interrupted: speakerId={0} interrupted to {1} (audioLevel={2}",
+                idInterrupted,
+                idInterrupting,
                 e.AudioLevel));
+
+            var msg = string.Format("Interrupting: {0}", idInterrupting);
+            this.alerts.Add(new MeetingAlert { Message = msg });
 
             User speaker = null;
             if (TryGetMeetingAttendee(e.InterrupingSpeaker.Id, out speaker))
             {
-                userDb.WriteInterruption(speaker.Id, this.currMeeting.Id, DateTimeOffset.Now, e.AudioLevel, e.InterruptedSpeaker.Id);
+                userDb.WriteInterruption(idInterrupting, this.currMeeting.Id, DateTimeOffset.Now, e.AudioLevel, idInterrupted);
             }
         }
 
         private void tracker_SpeakerChanged(object sender, SpeakerChangedEventArgs e)
         {
+            var idOld = e.OldSpeaker == null ? "null" : e.OldSpeaker.Id;
+            var idNew = e.NewSpeaker == null ? "null" : e.NewSpeaker.Id;
+
             Debug.WriteLine(string.Format("Speaker changed: oldSpeaker={0} newSpeaker={1} audioLevel = {2}",
-                e.OldSpeaker.Id,
-                e.NewSpeaker.Id,
+                idOld,
+                idNew,
                 e.NewAudioLevel));
+
+            var msg = string.Format("Speaker: {0}", idNew);
+            this.alerts.Add(new MeetingAlert { Message = msg });
+
 
             User speaker = null;
             if (TryGetMeetingAttendee(e.NewSpeaker.Id, out speaker))
             {
-                userDb.WriteSpeaker(speaker.Id, this.currMeeting.Id, DateTimeOffset.Now, e.NewAudioLevel);
+                var id = speaker == null ? "none" : speaker.Id;
+                userDb.WriteSpeaker(id, this.currMeeting.Id, DateTimeOffset.Now, e.NewAudioLevel);
             }
         }
         #endregion
@@ -233,6 +254,7 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
 
                 // create new meeting
                 this.currMeeting = new MeetingInfo(meetingName, participants);
+                this.alerts = new ObservableCollection<MeetingAlert> { };
                 
                 // update the meeting panel
                 this.meetingName.Content = this.currMeeting.Name;
@@ -245,8 +267,8 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
                 }
 
                 // startSpeaker Tracking
-                var userIds = participants.Select((u) => new UserIdentifier(u.Index, u.Id, u.Angle)).ToArray();
-                this.tracker = new MockSpeakerTracker();
+                var userIds = GetParticipantsIds();
+             //   this.tracker = new MockSpeakerTracker();
                 tracker.SpeakerChanged += tracker_SpeakerChanged;
                 tracker.SpeakerInterrupted += tracker_SpeakerInterrupted;
                 tracker.SpeakerVolumeChanged += tracker_SpeakerVolumeChanged;
@@ -257,13 +279,14 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
             {
                 // stop the current meeting
                 this.currMeeting = null;
+                this.alerts = null;
 
                 // stop speaker tracking
                 tracker.SpeakerChanged -= tracker_SpeakerChanged;
                 tracker.SpeakerInterrupted -= tracker_SpeakerInterrupted;
                 tracker.SpeakerVolumeChanged -= tracker_SpeakerVolumeChanged;
                 this.tracker.Stop();
-                this.tracker = null;
+               // this.tracker = null;
 
                 // update UI
                 this.meetingStart.Content = "start";
@@ -298,6 +321,16 @@ namespace Microsoft.Samples.Kinect.KinectExplorer
             }
 
             return participants;
+        }
+
+        private IEnumerable<UserIdentifier> GetParticipantsIds()
+        {
+            var  userIds = new List<UserIdentifier>{};
+            if (this.currMeeting != null && this.currMeeting.Attendees != null)
+            {
+                userIds = this.currMeeting.Attendees.Select((u) => new UserIdentifier(u.Index, u.Id, u.Angle)).ToList();
+            }
+            return userIds;
         }
         #endregion
 

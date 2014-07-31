@@ -84,6 +84,29 @@ namespace SpeakerTracking
             this.Id = id;
             this.Angle = seatAngle;
         }
+
+        public static bool Equals(UserIdentifier user1, UserIdentifier user2)
+        {
+            if (user1 != null && user2 != null)
+            {
+                return user1.Id == user2.Id;
+            }
+
+            if (user1 == null && user2 == null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == null || !(obj is UserIdentifier))
+                return false;
+            else
+                return this.Id == ((UserIdentifier)obj).Id;
+        }
     }
 
     public class UserData

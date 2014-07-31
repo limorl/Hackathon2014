@@ -267,7 +267,7 @@ namespace SpeakerTracking
         {
             if (!isTracking)
             {
-                throw new InvalidOperationException("Hasn't started tracking yet");
+              //  throw new InvalidOperationException("Hasn't started tracking yet");
             }
 
             this.users.ForEach(u => u.EndSession());
