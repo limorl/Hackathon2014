@@ -27,13 +27,14 @@
         public MainWindow()
         {
             InitializeComponent();
+            int index = -1;
             var users = new UserIdentifier[] {
-                new UserIdentifier(-1, "No One", 132),
-                new UserIdentifier(0, "deliak", 145),
-                new UserIdentifier(1, "huberte", 132),
-                new UserIdentifier(2, "limorl", 321),
-                new UserIdentifier(3, "yairg", 123),
-                new UserIdentifier(4, "yoramy", 123),
+                new UserIdentifier(index++, "No One", 132),
+                new UserIdentifier(index++, "deliak", 145),
+              //  new UserIdentifier(index++, "huberte", 132),
+                new UserIdentifier(index++, "limorl", 321),
+              //  new UserIdentifier(index++, "yairg", 123),
+                new UserIdentifier(index++, "yoramy", 123),
 
             };
             speakerTracker = new SpeakerVerificationUserTracker(users);

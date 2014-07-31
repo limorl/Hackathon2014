@@ -22,6 +22,7 @@ namespace SpeakerTracking
             this._users = users;
             Task.Factory.StartNew( () =>
                 {
+                    int quietFrameCount = 0;
                     var reader = new StreamReader(client);
                     while (true)
                     {
@@ -38,10 +39,22 @@ namespace SpeakerTracking
                         var speakerId = int.Parse(parsedData[2]);
                         if (audioLevel < 5000 )
                         {
-                            speakerId = -1;
+                            quietFrameCount++;
+                            if (quietFrameCount > 2000)
+                            {
+                                speakerId = -1;
+                            }
+                        }
+                        else
+                        {
+                            // We got a speaking frame its about to 
+                            quietFrameCount = 0;
                         }
                         if (this.currentSpeaker == null || this.currentSpeaker.Index != speakerId)
                         {
+                            // We wait for enought frames before we switch user
+
+
                             // 
                             // The user has changed lets notify 
                             //
