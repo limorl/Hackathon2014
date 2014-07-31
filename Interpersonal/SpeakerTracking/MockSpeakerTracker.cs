@@ -2,22 +2,22 @@
 
 namespace SpeakerTracking
 {
+    using Microsoft.Kinect;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
+    using System.Threading;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
-    using Microsoft.Kinect;
-    using System.Threading;
 
     /// <summary>
     /// A mock tracker that simulates 4 potential speakers, each is associated with a beam section of 22.5 degrees
     /// It simulates a meeting where each user speaks for a period of time, then with some probability it increase the voice, or being interrupted
     /// </summary>
-    class MockSpeakerTracker : ISpeakerTracker
+    public class MockSpeakerTracker : ISpeakerTracker
     {
-        private const int UserCount = 4;
         private const double MinSpeakerAngle = -45;
         private const double MaxSpeakerAngle = 45;
         
@@ -27,6 +27,7 @@ namespace SpeakerTracking
         private const double ProbabilityToBeInterrupted = 0.3;
         private const double ProbabilityToHaveSpeaker = 0.8;
 
+        private List<UserIdentifier> userIds;
         private List<UserData> users;
         private bool usersLock;
         private int currSpeakerIndex;
@@ -95,15 +96,25 @@ namespace SpeakerTracking
 
         private void InitializeMockUsers()
         {
-            this.users = new List<UserData>(UserCount);
+            this.userIds = new List<UserIdentifier>
+            {
+                new UserIdentifier(0, "deliak", -15),
+                new UserIdentifier(1, "yoramy", 45),
+                new UserIdentifier(2, "limorl", 15),
+                new UserIdentifier(3, "hubert", 45)
+            };
+
+            var userCount = userIds.Count;
+
+            this.users = new List<UserData>();
 
             var userAngle = MinSpeakerAngle;
-            var deltaAngle = (MaxSpeakerAngle - MinSpeakerAngle) / UserCount;
+            var deltaAngle = (MaxSpeakerAngle - MinSpeakerAngle) / userCount;
         
-            for (int i = 0; i < UserCount; i++)
+            for (int i = 0; i < userCount; i++)
             {
                 // TODO: add suport in getting user history and merge
-                var user = new UserIdentifier(i, userAngle);
+                var user = new UserIdentifier(i, userIds.ElementAt(i).Id, userIds.ElementAt(i).Angle);
                 var userData = new UserData(user);
                 this.users.Add(userData);
 
@@ -193,7 +204,7 @@ namespace SpeakerTracking
         {
             if (this.currSpeakerIndex == NoSpeaker)
             {
-                return random.Next(UserCount);
+                return random.Next(this.userIds.Count);
             }
             
             if (random.NextDouble() < ProbabilityToContinueSpeaking)
@@ -203,7 +214,7 @@ namespace SpeakerTracking
             }
 
             // else, return a new random speaker
-            return random.Next(UserCount); 
+            return random.Next(this.userIds.Count); 
         }
 
         private bool SimulateSpeakerInterruptedWithProbability()
@@ -211,10 +222,10 @@ namespace SpeakerTracking
             if (random.NextDouble() < ProbabilityToBeInterrupted)
             {
                 // get a random interrupting speaker and if it's the same as the current one, set it to the next user (cyclic)
-                var interruptingSpeakerId = random.Next(UserCount);
+                var interruptingSpeakerId = random.Next(this.userIds.Count);
                 if (interruptingSpeakerId == this.currSpeakerIndex)
                 {
-                    interruptingSpeakerId = (interruptingSpeakerId + 1) % UserCount;
+                    interruptingSpeakerId = (interruptingSpeakerId + 1) % this.userIds.Count;
                 }
 
                 var eventArgs = new SpeakerInterruptedEventArgs

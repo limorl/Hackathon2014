@@ -18,6 +18,63 @@
                 <Setter Property="Height" Value="70"/>
                 <Setter Property="Margin" Value="5"/>
             </Style>
+            <Style x:Key="ButtonTransparentBackgroundStyle">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <SolidColorBrush x:Key="Button.Static.Background" Color="Transparent"/>
+            <SolidColorBrush x:Key="Button.Static.Border" Color="Transparent"/>
+            <SolidColorBrush x:Key="Button.MouseOver.Background" Color="Transparent"/>
+            <SolidColorBrush x:Key="Button.MouseOver.Border" Color="Transparent"/>
+            <SolidColorBrush x:Key="Button.Pressed.Background" Color="Transparent"/>
+            <SolidColorBrush x:Key="Button.Pressed.Border" Color="Transparent"/>
+            <SolidColorBrush x:Key="Button.Disabled.Background" Color="Transparent"/>
+            <SolidColorBrush x:Key="Button.Disabled.Border" Color="Transparent"/>
+            <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+            <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonTransparentBackgroundStyle}"/>
+                <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="1"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsDefaulted" Value="true">
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                                    <!-- ADDED: -->
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="true">
+                                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                    <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
@@ -60,12 +117,14 @@
                     <!-- title -->
                     <Label Grid.Row="0" Grid.ColumnSpan="3" Content="participants" Margin="0,10,0,0" FontFamily="Segoe UI" FontSize="16" Foreground="#7D7D7D" />                    
                     <!-- participants row 1 -->
-                    <Image Grid.Row="1" Grid.Column="0" Source="Images\user0.png" Style="{StaticResource ParticipantImageStyle}" />
-                    <Image Grid.Row="1" Grid.Column="1" Source="Images\user1.png" Style="{StaticResource ParticipantImageStyle}" />
-                    <Image Grid.Row="1" Grid.Column="2" Source="Images\user2.png" Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser0" Grid.Row="1" Grid.Column="0" Source="Images\deliak.jpg" Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser1" Grid.Row="1" Grid.Column="1" Source="Images\huberte.jpg" Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser4" Grid.Row="1" Grid.Column="2" Source="Images\limorl.jpg" Style="{StaticResource ParticipantImageStyle}" />
 
                     <!-- participants row 2 -->
-                    <Image Grid.Row="2" Grid.Column="0" Source="Images\user3.png"  Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser2" Grid.Row="2" Grid.Column="0" Source="Images\yairg.jpg"  Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser3" Grid.Row="2" Grid.Column="1" Source="Images\yoramy.jpg"  Style="{StaticResource ParticipantImageStyle}" />
+                    <Image Name="imageUser5" Grid.Row="2" Grid.Column="2"  Style="{StaticResource ParticipantImageStyle}" />
                 </Grid>
                 <Label Content="speaking time" Margin="0,10,0,0" FontFamily="Segoe UI" FontSize="16" Foreground="#7D7D7D" />
                 <!-- mock image as a place holder -->
@@ -85,16 +144,25 @@
                         <Grid>
                             <kt:KinectColorViewer x:Name="ColorViewer" KinectSensorManager="{Binding KinectSensorManager}" CollectFrameRate="True" RetainImageOnSensorChange="True" />
                             <Canvas>
-                                <!--<kt:KinectSkeletonViewer 
+                                <kt:KinectSkeletonViewer 
                                     KinectSensorManager="{Binding KinectSensorManager}"
                                     Visibility="{Binding KinectSensorManager.ColorStreamEnabled, Converter={StaticResource BoolToVisibilityConverter}}"
                                     Width="{Binding ElementName=ColorViewer,Path=ActualWidth}"
                                     Height="{Binding ElementName=ColorViewer,Path=ActualHeight}"
-                                    ImageType="Color" />-->
-                                <st:KinectSpeakerViewer 
+                                    ImageType="Color" />
+                                <!--<st:KinectSpeakerViewer 
                                     KinectSensorManager="{Binding KinectSensorManager}"
                                     Visibility="{Binding KinectSensorManager.ColorStreamEnabled, Converter={StaticResource BoolToVisibilityConverter}}"
-                                    ImageType="Color" />
+                                    ImageType="Color" />-->
+                            </Canvas>
+                            <!-- Selection for user Tagging -->
+                            <Canvas Name="selectionCanvas" Visibility="Collapsed">
+                                <Border Name="selectionBorder" BorderBrush="#838383" BorderThickness="1" Background="#838383" Opacity="0.5" />
+                                <Border Name="taggingBorder" BorderBrush="#838383" BorderThickness="1" Background="#838383" Visibility="Collapsed">
+                                    <StackPanel Orientation="Horizontal">
+                                       
+                                    </StackPanel>
+                                </Border>
                             </Canvas>
                         </Grid>
                     </Viewbox>
@@ -112,7 +180,9 @@
                     <Rectangle Fill="#7777" Visibility="{Binding KinectSensorManager.ColorStreamEnabled, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=True}" SnapsToDevicePixels="True" HorizontalAlignment="Right" />
                     
                     <!-- image to open the debug window -->
-                    <Button Name="debugButtn" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="25" Height="25" Background="Transparent" Click="debugButton_Click" BorderThickness="0">
+                    <Button Name="debugButtn" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="25" Height="25" Background="Transparent" 
+                            Style="{DynamicResource ButtonStyle}"
+                            Click="debugButton_Click" BorderThickness="0">
                         <Image Name="debugButtonImage"  Source="Images\arrow-right-round.png"   />
                     </Button>
                     
@@ -121,7 +191,8 @@
         </Grid>
         
         <!-- The debug panel-->
-        <DockPanel Name="settingsPanel" Grid.Row="0" Grid.Column="2" Margin="0" Background="#2F2F2F" >
+        <DockPanel Name="settingsPanel" Grid.Row="0" Grid.Column="2" Margin="0" Background="#2F2F2F" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <ScrollViewer>
             <StackPanel Name="stackPanelSettings" DockPanel.Dock="Right"
                 Orientation="Vertical" 
                 Grid.RowSpan="2" 
@@ -190,15 +261,43 @@
                     </Button>
                 </Grid>
 
-                <kt:KinectSettings KinectSensorManager="{Binding KinectSensorManager}" DepthTreatment="{Binding DepthTreatment, Mode=TwoWay}" Margin="0 20 0 0" SnapsToDevicePixels="True" Loaded="KinectSettings_Loaded"/>
+                <kt:KinectSettings KinectSensorManager="{Binding KinectSensorManager}" DepthTreatment="{Binding DepthTreatment, Mode=TwoWay}" Margin="0 10 0 0" SnapsToDevicePixels="True" Loaded="KinectSettings_Loaded"/>
 
-                <kt:KinectAudioViewer 
+                <kt:KinectAudioViewer
                 x:Name="kinectAudioViewer" 
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch"
                 SnapsToDevicePixels="True"
                 KinectSensorManager="{Binding KinectSensorManager}"/>
+
+                <StackPanel DockPanel.Dock="Top" Orientation="Vertical" Margin="0,5,0,0" Background="#565656">
+                    <Label Content="meeting setup" FontFamily="Segoe UI" FontSize="22" Foreground="White" Margin="5,0,0,0" />
+                    <TextBox  Name="setupMeetingName" Text="meeting name" Background="transparent"
+                              FontFamily="Segoe UI" FontSize="16" Foreground="White" Margin="5" />
+                    <Label Content="participants" Margin="0,0,0,0" FontFamily="Segoe UI" FontSize="16" Foreground="#7D7D7D" />
+                    <ListView Name="setupParticipants" Background="Transparent" Margin="0,10,0,10" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                    <CheckBox Name="checkBox" Width="15" Height="15" Margin="5,0,5,0"/>
+                                    <Image Source="{Binding ImageSource}" Style="{StaticResource ParticipantImageStyle}" Width="32" Height="35" Margin="5,0,10,0"/>
+                                    <TextBox Text="{Binding Angle}" Width="40" VerticalAlignment="Center"  Background="Transparent"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <!-- sample item -->
+                        <ListItem>
+
+                        </ListItem>
+                    </ListView>
+                        <Button Name="meetingStart"  Content="save" FontFamily="Segoe UI" FontSize="16" Foreground="White"
+                            HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="35" Height="25" Background="Transparent" 
+                            Style="{DynamicResource ButtonStyle}" Margin="0,0,5,5" BorderThickness="1" BorderBrush="#7D7D7D"
+                            Click="meetingStart_Click" >
+                        </Button>
+                    </StackPanel>
             </StackPanel>
+            </ScrollViewer>
         </DockPanel>
     </Grid> 
 </Window>

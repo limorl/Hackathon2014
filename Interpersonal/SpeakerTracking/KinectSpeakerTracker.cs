@@ -3,41 +3,59 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Samples.Kinect.WpfViewers;
+using System.IO.Pipes;
+using System.IO;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace SpeakerTracking
 {
-    public class KinectSpeakerTracker : ISpeakerTracker
+    public class SpeakerVerificationUserTracker : ISpeakerTracker
     {
-        public KinectSpeakerTracker( KinectSensorManager manager, IEnumerable<UserIdentifier> users)
+        private NamedPipeClientStream client;
+        static readonly string pipeName = @"\\.\pipe\interpersonal";
+        public SpeakerVerificationUserTracker(IEnumerable<UserIdentifier> users)
         {
-            manager.KinectSensorChanged += (a, b) =>
-            {
-                manager.KinectSensor.AudioSource.AutomaticGainControlEnabled = true;
-                manager.KinectSensor.AudioSource.SoundSourceAngleChanged += (source, args) =>
+            this.currentSpeaker = users.First();
+            client = new NamedPipeClientStream(".", "interpersonal", PipeDirection.In);
+            client.Connect();
+            this._users = users;
+            Task.Factory.StartNew( () =>
                 {
-                    if (args.ConfidenceLevel >= 0.3)
+                    var reader = new StreamReader(client);
+                    while (true)
                     {
-                        var angle = args.Angle;
-                        var matchingRange = users.OrderBy(u => Math.Abs(angle - u.SeatAngle)).FirstOrDefault();
-                        if (matchingRange != currentSpeaker)
+                        // The line format is 
+                        // a {TimeStamp} {Speeker ID} {AudioLevel} 
+                        var line = reader.ReadLine();
+                        var parsedData = line.Split(' ');
+                        if (!String.Equals(parsedData[0],"a"))
                         {
-                            var speakerChangedEventArgs = new SpeakerChangedEventArgs
+                            Debug.WriteLine("Invalid line " + line);
+                        }
+                        var speakerId = int.Parse(parsedData[2]);
+                        if (this.currentSpeaker == null || this.currentSpeaker.Index != speakerId)
+                        {
+                            // 
+                            // The user has changed lets notify 
+                            //
+                            var newSpeaker = this._users.Where(u => u.Index == speakerId).FirstOrDefault();
+                            if (newSpeaker == default(UserIdentifier))
                             {
-                                OldSpeaker = this.currentSpeaker,
-                                NewSpeaker = matchingRange
-                            };
-                            this.currentSpeaker = matchingRange;
-                            SpeakerChanged.Invoke(this, speakerChangedEventArgs);
+                                Debug.WriteLine("Invalid speaker Id raised");
+                            }
+                            else
+                            {
+
+                                var speakerChangedEventArg = new SpeakerChangedEventArgs { OldSpeaker = this.currentSpeaker, NewSpeaker = newSpeaker };
+                                this.currentSpeaker = newSpeaker;
+                                SpeakerChanged.Invoke(this, speakerChangedEventArg);
+                            }
                         }
                     }
-                };
-            };
+                });
         }
 
-        void AudioSource_BeamAngleChanged(object sender, Microsoft.Kinect.BeamAngleChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
         public event EventHandler<SpeakerChangedEventArgs> SpeakerChanged;
 
         public event EventHandler<SpeakerVolumeChangedEventArgs> SpeakerVolumeChanged;
@@ -69,7 +87,6 @@ namespace SpeakerTracking
 
         private bool _isTracking = false;
 
-        private AudioTracker _audioBase;
         private IEnumerable<UserIdentifier> _users;
         private UserIdentifier currentSpeaker = null;
     }

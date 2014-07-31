@@ -69,6 +69,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="IUserDb.cs" />
     <Compile Include="KinectStatusItem.cs" />
     <Compile Include="KinectWindow.xaml.cs">
       <DependentUpon>KinectWindow.xaml</DependentUpon>
@@ -79,6 +81,9 @@
     </Compile>
     <Compile Include="KinectSensorItem.cs" />
     <Compile Include="KinectSensorItemCollection.cs" />
+    <Compile Include="MeetingInfo.cs" />
+    <Compile Include="UIUtils.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="VisibilityConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -118,16 +123,19 @@
     <Resource Include="Images\logo_temp.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Simulations\" />
+    <Resource Include="Images\deliak.jpg" />
+    <Resource Include="Images\huberte.jpg" />
+    <Resource Include="Images\limorl.jpg" />
+    <Resource Include="Images\yairg.jpg" />
+    <Resource Include="Images\yoramy.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\arrow-left-round.png" />
     <Resource Include="Images\arrow-right-round.png" />
     <Resource Include="Images\speakingTime.png" />
-    <Resource Include="Images\user0.png" />
-    <Resource Include="Images\user1.png" />
-    <Resource Include="Images\user2.png" />
-    <Resource Include="Images\user3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Dashboard.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
